@@ -66,7 +66,7 @@ app.get("/api/workouts/range", (req, res) => {
 app.post("/api/workouts", (req, res) => {
   console.log(req.body);
 
-  db.workouts.insert(req.body, (error, data) => {
+  db.workouts.insertOne(req.body, (error, data) => {
     if (error) {
       res.send(error);
     } else {
@@ -78,13 +78,13 @@ app.post("/api/workouts", (req, res) => {
 //Get all route
 
 app.get("/api/workouts", (req, res) => {
-  db.workouts.find({}, (error, data) => {
+  db.workouts.find({}).populate("workouts", (error, data) => {
     if (error) {
       res.send(error);
     } else {
-      res.json(data);
+      res.send(data);
     }
-  });
+})
 });
 
 //ID get route
@@ -111,8 +111,12 @@ app.put("/api/workouts/:id", (req, res) => {
     },
     {
       $set: {
-        exercises: req.body.title,
-        sets: req.body.note,
+        type: req.body.type,
+        name: req.body.name,
+        duration: req.body.duration,
+        weight: req.body.weight,
+        reps: req.body.reps,
+        sets: req.body.sets,
         modified: Date.now(),
       },
     },

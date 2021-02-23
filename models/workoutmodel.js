@@ -20,9 +20,41 @@ const workoutSchema = new Schema({
 });
 
 workoutSchema.methods.getLastWorkout = function () {
-    this.lastWorkout = Date.now();
+    this.lastWorkout = {
+        day: Date.now(),
+    };
 
     return this.lastWorkout;
+}
+
+workoutSchema.methods.addExercise = function () {
+    this.set({
+        
+        day = Date.now(),
+        exercises = {
+            type: this.type,
+            name: this.name,
+            duration: this.duration,
+            weight: this.weight,
+            reps: this.reps,
+            sets: this.sets,
+            distance: this.distance
+        }
+
+    })
+    
+}
+
+workoutSchema.methods.getWorkoutsInRange = function () {
+    this.workoutsRange = this.aggregate([
+        {
+            $addFields: {
+                totalWeight: { $sum: "$weight" } ,
+                totalDuration: { $sum: "$duration" }
+              }
+        }
+    ])
+    return this.workoutsRange;
 }
 
 
