@@ -52,7 +52,18 @@ app.get("/stats", (req, res) => {
   res.sendFile(path.join(__dirname + "/public/stats.html"));
 });
 
-app.post("/exercise", (req, res) => {
+app.get("/api/workouts/range", (req, res) => {
+  db.workouts.aggregate([
+    {
+      $addFields: {
+        totalDuration: { $sum: "$duration" },
+        totalWeight: {$sum: "$weight"}
+      },
+    },
+  ]);
+});
+
+app.post("/api/workouts", (req, res) => {
   console.log(req.body);
 
   db.workouts.insert(req.body, (error, data) => {
@@ -66,7 +77,7 @@ app.post("/exercise", (req, res) => {
 
 //Get all route
 
-app.get("/all", (req, res) => {
+app.get("/api/workouts", (req, res) => {
   db.workouts.find({}, (error, data) => {
     if (error) {
       res.send(error);
@@ -78,7 +89,7 @@ app.get("/all", (req, res) => {
 
 //ID get route
 
-app.get("/api/exercise/:id", (req, res) => {
+app.get("/api/workouts/:id", (req, res) => {
   db.workouts.findOne(
     {
       _id: mongojs.ObjectId(req.params.id),
@@ -93,7 +104,7 @@ app.get("/api/exercise/:id", (req, res) => {
   );
 });
 
-app.put("/exercise/:id", (req, res) => {
+app.put("/api/workouts/:id", (req, res) => {
   db.workouts.update(
     {
       _id: mongojs.ObjectId(req.params.id),
@@ -117,7 +128,7 @@ app.put("/exercise/:id", (req, res) => {
 
 //Delete by ID route
 
-app.delete("/delete/:id", (req, res) => {
+app.delete("/api/delete/:id", (req, res) => {
   db.workouts.remove(
     {
       _id: mongojs.ObjectID(req.params.id),
