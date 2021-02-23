@@ -71,6 +71,7 @@ app.post("/api/workouts", (req, res) => {
       res.send(error);
     } else {
       res.send(data);
+      console.log(data);
     }
   });
 });
@@ -78,7 +79,7 @@ app.post("/api/workouts", (req, res) => {
 //Get all route
 
 app.get("/api/workouts", (req, res) => {
-  db.workouts.find({}).populate("workouts", (error, data) => {
+  db.workouts.find({}, (error, data) => {
     if (error) {
       res.send(error);
     } else {
