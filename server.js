@@ -52,7 +52,7 @@ app.get("/stats", (req, res) => {
   res.sendFile(path.join(__dirname + "/public/stats.html"));
 });
 
-app.post("/submit", (req, res) => {
+app.post("/exercise", (req, res) => {
   console.log(req.body);
 
   db.workouts.insert(req.body, (error, data) => {
@@ -93,7 +93,7 @@ app.get("/api/exercise/:id", (req, res) => {
   );
 });
 
-app.post("/update/:id", (req, res) => {
+app.put("/exercise/:id", (req, res) => {
   db.workouts.update(
     {
       _id: mongojs.ObjectId(req.params.id),
